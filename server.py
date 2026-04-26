@@ -19,7 +19,7 @@ def serve_dir_directory_index():
         # if app.py exists we use the render function
         out = subprocess.Popen(['python3','app.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout,stderr = out.communicate()
-        return stdout if out.returncode == 0 else f"<pre style='color: red;'>{stdout.decode('utf-8')}</pre>"
+        return stdout if out.returncode == 0 else f"<pre>{stdout.decode('utf-8')}</pre>"
     if os.path.exists("index.html"):
         return send_from_directory(static_file_dir, 'index.html')
     else:

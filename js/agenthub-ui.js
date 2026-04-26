@@ -1,82 +1,228 @@
-// --- ADD/SAVE FUNCTIONALITY FOR ALL SECTIONS WITH LOCALSTORAGE PERSISTENCE ---
+// --- Modal open/close helpers (ensure z-50 and fixed classes are always present) ---
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('fixed', 'z-50', 'flex', 'items-center', 'justify-center');
+    // Prevent background scroll
+    document.body.classList.add('overflow-hidden');
+  }
+}
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('fixed', 'z-50', 'flex', 'items-center', 'justify-center');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+// --- Delete modal close/cancel logic for all entities (universal, by class) ---
 document.addEventListener('DOMContentLoaded', function () {
-  // --- AGENT MANAGEMENT DOM ELEMENTS ---
-  const editAgentForm = document.getElementById('editAgentForm');
-  // --- AGENT CONTRACTS DOM ELEMENTS ---
-  const contractsList = document.querySelector('.contracts-list');
-  const editContractForm = document.getElementById('editContractForm');
-  let editingContractLi = null;
-  function renderContracts(contracts) {
-    contractsList.innerHTML = '';
-    contracts.forEach((contract, idx) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span class="contracts-list-text">${contract.name} - ${contract.status}</span><span class="contracts-list-actions"><button class="btn edit-contract-btn">Edit</button><button class="btn delete-contract-btn">Delete</button></span>`;
-      contractsList.appendChild(li);
-      li.querySelector('.edit-contract-btn').addEventListener('click', function () {
-        document.getElementById('editContractName').value = contract.name;
-        document.getElementById('editContractStatus').value = contract.status;
-        editingContractLi = li;
-        li.dataset.idx = idx;
-        openModal('editContractModal');
-      });
-      li.querySelector('.delete-contract-btn').addEventListener('click', function () {
-        contracts.splice(idx, 1);
-        saveToStorage('contracts', contracts);
-        renderContracts(contracts);
-      });
+  // Attach close logic to all .modal .close and .modal .cancel buttons
+  document.querySelectorAll('.modal .close').forEach(btn => {
+    btn.addEventListener('click', function () {
+      closeModal(btn.closest('.modal').id);
+    });
+  });
+  document.querySelectorAll('.modal .cancel, .modal [id^="cancelDelete"]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      closeModal(btn.closest('.modal').id);
+    });
+  });
+
+  // Close modals on backdrop click
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function (e) {
+      if (e.target === this) closeModal(modal.id);
+    });
+  });
+
+  // Add/Edit Card modal close button
+  const closeEditCardModal = document.getElementById('closeEditCardModal');
+  if (closeEditCardModal) {
+    closeEditCardModal.addEventListener('click', function () {
+      closeModal('editCardModal');
     });
   }
-  // --- LOCALSTORAGE HELPERS ---
-  function saveToStorage(key, arr) {
-    localStorage.setItem(key, JSON.stringify(arr));
+
+  // Add Card button
+  const addCardBtn = document.getElementById('addCardBtn');
+  const editCardForm = document.getElementById('editCardForm');
+  if (addCardBtn && editCardForm) {
+    addCardBtn.addEventListener('click', function () {
+      window.editingCardIdx = null;
+      editCardForm.reset();
+      openModal('editCardModal');
+    });
   }
-  function loadFromStorage(key) {
-    try {
-      return JSON.parse(localStorage.getItem(key)) || [];
-    } catch {
-      return [];
+});
+// --- Track agent CRUD actions for activity chart ---
+const agentActivityLog = Array(7).fill(0); // 7 days, Mon-Sun
+function logAgentActivity() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun, 1=Mon, ...
+  // Shift so 0=Mon, 6=Sun
+  const idx = (day + 6) % 7;
+  agentActivityLog[idx]++;
+  updateWeeklyActivityChart();
+}
+
+function updateWeeklyActivityChart() {
+  if (window.Chart && window.weeklyActivityChartInstance) {
+    window.weeklyActivityChartInstance.data.datasets[0].data = [...agentActivityLog];
+    window.weeklyActivityChartInstance.update();
+  }
+}
+// --- Ensure close (X) button on Add/Edit Card modal closes the modal ---
+document.addEventListener('DOMContentLoaded', function () {
+  const closeEditCardModal = document.getElementById('closeEditCardModal');
+  if (closeEditCardModal) {
+    closeEditCardModal.addEventListener('click', function () {
+      document.getElementById('editCardModal').classList.add('hidden');
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  // --- LIGHT/DARK MODE TOGGLE (universal, always works) ---
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const html = document.documentElement;
+  // Always start in light mode
+  html.classList.remove('dark');
+  if (darkModeToggle) darkModeToggle.textContent = '🌙';
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', function () {
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        darkModeToggle.textContent = '🌙';
+        // Also update sidebar and body backgrounds if needed
+        document.body.classList.remove('dark');
+      } else {
+        html.classList.add('dark');
+        darkModeToggle.textContent = '☀️';
+        document.body.classList.add('dark');
+      }
+    });
+  }
+
+  // --- In-memory data only ---
+  let agents = [
+    { name: 'Agent Alpha', status: 'Active' },
+    { name: 'Agent Beta', status: 'Inactive' },
+    { name: 'Agent Gamma', status: 'Active' }
+  ];
+  let contracts = [
+    { name: 'Contract #001 (Agent Alpha)', status: 'Active' },
+    { name: 'Contract #002 (Agent Beta)', status: 'Pending' },
+    { name: 'Contract #003 (Agent Gamma)', status: 'Active' },
+    { name: 'Contract #004 (Agent Delta)', status: 'Inactive' }
+  ];
+  let cards = [
+    { name: 'Total Revenue', value: '$120,000' },
+    { name: 'Active Agents', value: '14' },
+    { name: 'Failing Agents', value: '2' }
+  ];
+  let users = [
+    { name: 'Alice Smith', email: 'alice@example.com', plan: 'Pro', status: 'Active' },
+    { name: 'Bob Jones', email: 'bob@example.com', plan: 'Free', status: 'Inactive' }
+  ];
+  let skills = [
+    { name: 'Negotiation', count: 8 },
+    { name: 'Sales', count: 5 },
+    { name: 'Support', count: 3 }
+  ];
+  let errors = [
+    { time: '2026-04-24 10:15', type: 'Critical', agent: 'Agent Alpha', desc: 'Failed to connect to data source.' },
+    { time: '2026-04-24 11:00', type: 'Warning', agent: 'Agent Beta', desc: 'Slow response detected.' }
+  ];
+
+  // --- Modal open/close helpers (ensure z-50 and fixed classes are always present) ---
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('fixed', 'z-50', 'flex', 'items-center', 'justify-center');
+      // Prevent background scroll
+      document.body.classList.add('overflow-hidden');
+    }
+  }
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('fixed', 'z-50', 'flex', 'items-center', 'justify-center');
+      document.body.classList.remove('overflow-hidden');
     }
   }
 
-  // --- Default contracts data if none in storage ---
-  let contracts = loadFromStorage('contracts');
-  if (contracts.length === 0 && contractsList) {
-    contracts = [
-      { name: 'Contract #001 (Agent Alpha)', status: 'Active' },
-      { name: 'Contract #002 (Agent Beta)', status: 'Pending' },
-      { name: 'Contract #003 (Agent Gamma)', status: 'Active' },
-      { name: 'Contract #004 (Agent Delta)', status: 'Inactive' }
-    ];
-    saveToStorage('contracts', contracts);
-  }
-  if (contractsList) renderContracts(contracts);
+  // ...existing code for CRUD, event listeners, etc...
 
-  if (editContractForm) {
-    editContractForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('editContractName').value;
-      const status = document.getElementById('editContractStatus').value;
-      if (editingContractLi && editingContractLi.dataset.idx !== undefined) {
-        contracts[editingContractLi.dataset.idx] = { name, status };
-      } else {
-        contracts.push({ name, status });
-      }
-      saveToStorage('contracts', contracts);
-      renderContracts(contracts);
-      editingContractLi = null;
-      closeModal('editContractModal');
+  // Fix: close (X) button on Add/Edit Card modal closes the modal
+  const closeEditCardModal = document.getElementById('closeEditCardModal');
+  if (closeEditCardModal) {
+    closeEditCardModal.addEventListener('click', function () {
+      closeModal('editCardModal');
     });
   }
-  document.getElementById('addContractBtn')?.addEventListener('click', function () {
-    editingContractLi = null;
-    editContractForm.reset();
-    openModal('editContractModal');
+
+  // Close modals on backdrop click
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function (e) {
+      if (e.target === this) closeModal(modal.id);
+    });
   });
 
-  // --- AGENT MANAGEMENT ---
+  // Close modals on close button
+  document.querySelectorAll('.modal .close').forEach(btn => {
+    btn.addEventListener('click', function () {
+      closeModal(btn.closest('.modal').id);
+    });
+  });
+
+  // ...existing code for CRUD event listeners...
+});
+
+// --- NEW LOCALSTORAGE CRUD PATTERN FOR ALL SECTIONS ---
+document.addEventListener('DOMContentLoaded', function () {
+
+  // --- In-memory data only ---
+  let agents = [
+    { name: 'Agent Alpha', status: 'Active' },
+    { name: 'Agent Beta', status: 'Inactive' },
+    { name: 'Agent Gamma', status: 'Active' }
+  ];
+  let contracts = [
+    { name: 'Contract #001 (Agent Alpha)', status: 'Active' },
+    { name: 'Contract #002 (Agent Beta)', status: 'Pending' },
+    { name: 'Contract #003 (Agent Gamma)', status: 'Active' },
+    { name: 'Contract #004 (Agent Delta)', status: 'Inactive' }
+  ];
+  let cards = [
+    { name: 'Total Revenue', value: '$120,000' },
+    { name: 'Active Agents', value: '14' },
+    { name: 'Failing Agents', value: '2' }
+  ];
+  let users = [
+    { name: 'Alice Smith', email: 'alice@example.com', plan: 'Pro', status: 'Active' },
+    { name: 'Bob Jones', email: 'bob@example.com', plan: 'Free', status: 'Inactive' }
+  ];
+  let skills = [
+    { name: 'Negotiation', count: 8 },
+    { name: 'Sales', count: 5 },
+    { name: 'Support', count: 3 }
+  ];
+  let errors = [
+    { time: '2026-04-24 10:15', type: 'Critical', agent: 'Agent Alpha', desc: 'Failed to connect to data source.' },
+    { time: '2026-04-24 11:00', type: 'Warning', agent: 'Agent Beta', desc: 'Slow response detected.' }
+  ];
+
+  // --- AGENTS ---
   const agentList = document.querySelector('.agent-list');
-  // (Duplicate declaration removed. Only one declaration and logic block for editAgentForm remains above.)
-  function renderAgents(agents) {
+  const editAgentForm = document.getElementById('editAgentForm');
+  let editingAgentIdx = null;
+  function renderAgents() {
+    if (!agentList) return;
     agentList.innerHTML = '';
     agents.forEach((agent, idx) => {
       const li = document.createElement('li');
@@ -85,60 +231,125 @@ document.addEventListener('DOMContentLoaded', function () {
       li.querySelector('.edit-agent-btn').addEventListener('click', function () {
         document.getElementById('editAgentName').value = agent.name;
         document.getElementById('editAgentStatus').value = agent.status;
-        editingAgentLi = li;
-        li.dataset.idx = idx;
+        editingAgentIdx = idx;
         openModal('editAgentModal');
       });
       li.querySelector('.delete-agent-btn').addEventListener('click', function () {
         agents.splice(idx, 1);
-        saveToStorage('agents', agents);
-        renderAgents(agents);
+        renderAgents();
+        logAgentActivity();
       });
     });
   }
-
-  // --- Default agents data if none in storage ---
-
-  // --- Default agents data if none in storage ---
-  let agents = loadFromStorage('agents');
-  if (agents.length === 0 && agentList) {
-    // Parse initial HTML as data (first load)
-    agents = Array.from(agentList.querySelectorAll('li')).map(li => {
-      const text = li.querySelector('.agent-list-text')?.textContent || li.textContent;
-      // Match "Agent Alpha (Active)"
-      const match = text.match(/^(.+?) \((.+)\)$/);
-      return match ? { name: match[1].trim(), status: match[2].trim() } : { name: text.trim(), status: '' };
-    });
-    saveToStorage('agents', agents);
-  }
-  if (agentList) renderAgents(agents);
-
+  if (agentList) renderAgents();
   if (editAgentForm) {
     editAgentForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const name = document.getElementById('editAgentName').value;
       const status = document.getElementById('editAgentStatus').value;
-      if (editingAgentLi && editingAgentLi.dataset.idx !== undefined) {
-        agents[editingAgentLi.dataset.idx] = { name, status };
+      if (editingAgentIdx !== null && editingAgentIdx >= 0 && editingAgentIdx < agents.length) {
+        agents[editingAgentIdx] = { name, status };
       } else {
         agents.push({ name, status });
       }
-      saveToStorage('agents', agents);
-      renderAgents(agents);
-      editingAgentLi = null;
+      renderAgents();
+      editingAgentIdx = null;
       closeModal('editAgentModal');
+      logAgentActivity();
     });
   }
+  // --- Initialize chart on dashboard if present ---
+  document.addEventListener('DOMContentLoaded', function () {
+    const chartCanvas = document.getElementById('weeklyActivityChart');
+    if (chartCanvas && window.Chart) {
+      window.weeklyActivityChartInstance = new Chart(chartCanvas, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Agent CRUD Actions',
+            data: [...agentActivityLog],
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: getComputedStyle(document.documentElement).classList.contains('dark') ? '#d1d5db' : '#374151' }
+            },
+            x: {
+              ticks: { color: getComputedStyle(document.documentElement).classList.contains('dark') ? '#d1d5db' : '#374151' }
+            }
+          }
+        }
+      });
+    }
+  });
   document.getElementById('addAgentBtn')?.addEventListener('click', function () {
-    editingAgentLi = null;
+    editingAgentIdx = null;
     editAgentForm.reset();
     openModal('editAgentModal');
   });
 
+  // --- CONTRACTS ---
+  const contractsList = document.querySelector('.contracts-list');
+  const editContractForm = document.getElementById('editContractForm');
+  let editingContractIdx = null;
+  function renderContracts() {
+    if (!contractsList) return;
+    contractsList.innerHTML = '';
+    contracts.forEach((contract, idx) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="contracts-list-text">${contract.name} - ${contract.status}</span><span class="contracts-list-actions"><button class="btn edit-contract-btn">Edit</button><button class="btn delete-contract-btn">Delete</button></span>`;
+      contractsList.appendChild(li);
+      li.querySelector('.edit-contract-btn').addEventListener('click', function () {
+        document.getElementById('editContractName').value = contract.name;
+        document.getElementById('editContractStatus').value = contract.status;
+        editingContractIdx = idx;
+        openModal('editContractModal');
+      });
+      li.querySelector('.delete-contract-btn').addEventListener('click', function () {
+        contracts.splice(idx, 1);
+        renderContracts();
+      });
+    });
+  }
+  if (contractsList) renderContracts();
+  if (editContractForm) {
+    editContractForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('editContractName').value;
+      const status = document.getElementById('editContractStatus').value;
+      if (editingContractIdx !== null && editingContractIdx >= 0 && editingContractIdx < contracts.length) {
+        contracts[editingContractIdx] = { name, status };
+      } else {
+        contracts.push({ name, status });
+      }
+      renderContracts();
+      editingContractIdx = null;
+      closeModal('editContractModal');
+    });
+  }
+  document.getElementById('addContractBtn')?.addEventListener('click', function () {
+    editingContractIdx = null;
+    editContractForm.reset();
+    openModal('editContractModal');
+  });
+
   // --- DASHBOARD CARDS ---
   const dashboardCards = document.querySelector('.dashboard-cards');
-  // (Duplicate declaration removed. Only one declaration and logic block for editCardForm remains above.)
-  function renderCards(cards) {
+  const editCardForm = document.getElementById('editCardForm');
+  let editingCardIdx = null;
+  function renderCards() {
+    if (!dashboardCards) return;
     // Remove all except addCardBtn
     Array.from(dashboardCards.querySelectorAll('.card')).forEach(card => card.remove());
     cards.forEach((card, idx) => {
@@ -149,57 +360,137 @@ document.addEventListener('DOMContentLoaded', function () {
       div.querySelector('.edit-card-btn').addEventListener('click', function () {
         document.getElementById('editCardName').value = card.name;
         document.getElementById('editCardValue').value = card.value;
-        editingCardDiv = div;
-        div.dataset.idx = idx;
+        editingCardIdx = idx;
         openModal('editCardModal');
       });
       div.querySelector('.delete-card-btn').addEventListener('click', function () {
         cards.splice(idx, 1);
-        saveToStorage('cards', cards);
-        renderCards(cards);
+        renderCards();
       });
     });
   }
-
-  // --- Default dashboard cards data if none in storage ---
-
-  let cards = loadFromStorage('cards');
-  if (cards.length === 0 && dashboardCards) {
-    cards = [
-      { name: 'Total Revenue', value: '$120,000' },
-      { name: 'Active Agents', value: '14' },
-      { name: 'Failing Agents', value: '2' }
-    ];
-    saveToStorage('cards', cards);
-  }
-  if (dashboardCards) renderCards(cards);
-
+  if (dashboardCards) renderCards();
   if (editCardForm) {
     editCardForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const name = document.getElementById('editCardName').value;
       const value = document.getElementById('editCardValue').value;
-      if (editingCardDiv && editingCardDiv.dataset.idx !== undefined) {
-        cards[editingCardDiv.dataset.idx] = { name, value };
+      if (editingCardIdx !== null && editingCardIdx >= 0 && editingCardIdx < cards.length) {
+        cards[editingCardIdx] = { name, value };
       } else {
         cards.push({ name, value });
       }
-      saveToStorage('cards', cards);
-      renderCards(cards);
-      editingCardDiv = null;
+      renderCards();
+      editingCardIdx = null;
       closeModal('editCardModal');
     });
   }
   document.getElementById('addCardBtn')?.addEventListener('click', function () {
-    editingCardDiv = null;
+    editingCardIdx = null;
     editCardForm.reset();
     openModal('editCardModal');
   });
 
-  // --- ERROR LOG ---
+  // --- USER MANAGEMENT ---
+  const userTable = document.querySelector('.user-table tbody');
+  const editUserForm = document.getElementById('editUserForm');
+  let editingUserIdx = null;
+  function renderUsers() {
+    if (!userTable) return;
+    userTable.innerHTML = '';
+    users.forEach((user, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${user.name}</td><td>${user.email}</td><td>${user.plan}</td><td>${user.status}</td><td><span class="user-table-actions"><button class="btn edit-user-btn">Edit</button><button class="btn delete-user-btn">Delete</button></span></td>`;
+      userTable.appendChild(tr);
+      tr.querySelector('.edit-user-btn').addEventListener('click', function () {
+        document.getElementById('editUserName').value = user.name;
+        document.getElementById('editUserEmail').value = user.email;
+        document.getElementById('editUserPlan').value = user.plan;
+        document.getElementById('editUserStatus').value = user.status;
+        editingUserIdx = idx;
+        openModal('editUserModal');
+      });
+      tr.querySelector('.delete-user-btn').addEventListener('click', function () {
+        users.splice(idx, 1);
+        renderUsers();
+      });
+    });
+  }
+  if (userTable) renderUsers();
+  if (editUserForm) {
+    editUserForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('editUserName').value;
+      const email = document.getElementById('editUserEmail').value;
+      const plan = document.getElementById('editUserPlan').value;
+      const status = document.getElementById('editUserStatus').value;
+      if (editingUserIdx !== null && editingUserIdx >= 0 && editingUserIdx < users.length) {
+        users[editingUserIdx] = { name, email, plan, status };
+      } else {
+        users.push({ name, email, plan, status });
+      }
+      renderUsers();
+      editingUserIdx = null;
+      closeModal('editUserModal');
+    });
+  }
+  document.getElementById('addUserBtn')?.addEventListener('click', function () {
+    editingUserIdx = null;
+    editUserForm.reset();
+    openModal('editUserModal');
+  });
+
+  // --- SKILLS ---
+  const skillsList = document.querySelector('.skills-list');
+  const editSkillForm = document.getElementById('editSkillForm');
+  let editingSkillIdx = null;
+  function renderSkills() {
+    if (!skillsList) return;
+    skillsList.innerHTML = '';
+    skills.forEach((skill, idx) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="skills-list-text">${skill.name} (${skill.count} agents)</span><span class="skills-list-actions"><button class="btn edit-skill-btn">Edit</button><button class="btn delete-skill-btn">Delete</button></span>`;
+      skillsList.appendChild(li);
+      li.querySelector('.edit-skill-btn').addEventListener('click', function () {
+        document.getElementById('editSkillName').value = skill.name;
+        document.getElementById('editSkillCount').value = skill.count;
+        editingSkillIdx = idx;
+        openModal('editSkillModal');
+      });
+      li.querySelector('.delete-skill-btn').addEventListener('click', function () {
+        skills.splice(idx, 1);
+        renderSkills();
+      });
+    });
+  }
+  if (skillsList) renderSkills();
+  if (editSkillForm) {
+    editSkillForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('editSkillName').value;
+      const count = document.getElementById('editSkillCount').value;
+      if (editingSkillIdx !== null && editingSkillIdx >= 0 && editingSkillIdx < skills.length) {
+        skills[editingSkillIdx] = { name, count };
+      } else {
+        skills.push({ name, count });
+      }
+      renderSkills();
+      editingSkillIdx = null;
+      closeModal('editSkillModal');
+    });
+  }
+  document.getElementById('addSkillBtn')?.addEventListener('click', function () {
+    editingSkillIdx = null;
+    editSkillForm.reset();
+    openModal('editSkillModal');
+  });
+
+  // --- ERRORS ---
   const errorList = document.querySelector('.error-log-list');
-  // (Duplicate declaration removed. Only one declaration and logic block for editErrorForm remains above.)
-  function renderErrors(errors) {
+  const editErrorForm = document.getElementById('editErrorForm');
+  let editingErrorIdx = null;
+  function renderErrors() {
+    if (!errorList) return;
     errorList.innerHTML = '';
     errors.forEach((err, idx) => {
       const li = document.createElement('li');
@@ -210,27 +501,16 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('editErrorType').value = err.type;
         document.getElementById('editErrorAgent').value = err.agent;
         document.getElementById('editErrorDesc').value = err.desc;
-        editingErrorLi = li;
-        li.dataset.idx = idx;
+        editingErrorIdx = idx;
         openModal('editErrorModal');
       });
       li.querySelector('.delete-error-btn').addEventListener('click', function () {
         errors.splice(idx, 1);
-        saveToStorage('errors', errors);
-        renderErrors(errors);
+        renderErrors();
       });
     });
   }
-  let errors = loadFromStorage('errors');
-  if (errors.length === 0 && errorList) {
-    errors = Array.from(errorList.querySelectorAll('li')).map(li => {
-      const match = li.textContent.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}) — (\w+): (.*?) — (.*)$/);
-      return { time: match ? match[1] : '', type: match ? match[2] : '', agent: match ? match[3] : '', desc: match ? match[4] : '' };
-    });
-    saveToStorage('errors', errors);
-  }
-  if (errorList) renderErrors(errors);
-
+  if (errorList) renderErrors();
   if (editErrorForm) {
     editErrorForm.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -238,109 +518,21 @@ document.addEventListener('DOMContentLoaded', function () {
       const type = document.getElementById('editErrorType').value;
       const agent = document.getElementById('editErrorAgent').value;
       const desc = document.getElementById('editErrorDesc').value;
-      if (editingErrorLi && editingErrorLi.dataset.idx !== undefined) {
-        errors[editingErrorLi.dataset.idx] = { time, type, agent, desc };
+      if (editingErrorIdx !== null && editingErrorIdx >= 0 && editingErrorIdx < errors.length) {
+        errors[editingErrorIdx] = { time, type, agent, desc };
       } else {
         errors.push({ time, type, agent, desc });
       }
-      saveToStorage('errors', errors);
-      renderErrors(errors);
-      editingErrorLi = null;
+      renderErrors();
+      editingErrorIdx = null;
       closeModal('editErrorModal');
     });
   }
   document.getElementById('addErrorBtn')?.addEventListener('click', function () {
-    editingErrorLi = null;
+    editingErrorIdx = null;
     editErrorForm.reset();
     openModal('editErrorModal');
   });
-  // USER MANAGEMENT
-  // (Duplicate declaration removed. Only one declaration and logic block for userTable and editUserForm remains above.)
-  if (editUserForm) {
-    editUserForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('editUserName').value;
-      const email = document.getElementById('editUserEmail').value;
-      const plan = document.getElementById('editUserPlan').value;
-      const status = document.getElementById('editUserStatus').value;
-      if (editingUserRow) {
-        // Edit existing
-        editingUserRow.children[0].textContent = name;
-        editingUserRow.children[1].textContent = email;
-        editingUserRow.children[2].textContent = plan;
-        editingUserRow.children[3].textContent = status;
-      } else {
-        // Add new
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${name}</td><td>${email}</td><td>${plan}</td><td>${status}</td><td><span class="user-table-actions"><button class="btn edit-user-btn">Edit</button><button class="btn delete-user-btn">Delete</button></span></td>`;
-        userTable.appendChild(tr);
-        // Re-attach listeners
-        tr.querySelector('.edit-user-btn').addEventListener('click', function () {
-          document.getElementById('editUserName').value = tr.children[0].textContent;
-          document.getElementById('editUserEmail').value = tr.children[1].textContent;
-          document.getElementById('editUserPlan').value = tr.children[2].textContent;
-          document.getElementById('editUserStatus').value = tr.children[3].textContent;
-          editingUserRow = tr;
-          openModal('editUserModal');
-        });
-        tr.querySelector('.delete-user-btn').addEventListener('click', function () {
-          tr.remove();
-        });
-      }
-      editingUserRow = null;
-      closeModal('editUserModal');
-    });
-  }
-  document.getElementById('addUserBtn')?.addEventListener('click', function () {
-    editingUserRow = null;
-    editUserForm.reset();
-    openModal('editUserModal');
-  });
-
-  // SKILLS
-  // (Duplicate declaration removed. Only one declaration and logic block for skillsList and editSkillForm remains above.)
-  if (editSkillForm) {
-    editSkillForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('editSkillName').value;
-      const count = document.getElementById('editSkillCount').value;
-      if (editingSkillLi) {
-        editingSkillLi.querySelector('.skills-list-text').textContent = `${name} (${count} agents)`;
-      } else {
-        const li = document.createElement('li');
-        li.innerHTML = `<span class="skills-list-text">${name} (${count} agents)</span><span class="skills-list-actions"><button class="btn edit-skill-btn">Edit</button><button class="btn delete-skill-btn">Delete</button></span>`;
-        skillsList.appendChild(li);
-        li.querySelector('.edit-skill-btn').addEventListener('click', function () {
-          const match = li.querySelector('.skills-list-text').textContent.match(/^(.*?) \((\d+) agents?\)/);
-          document.getElementById('editSkillName').value = match ? match[1].trim() : '';
-          document.getElementById('editSkillCount').value = match ? match[2] : '';
-          editingSkillLi = li;
-          openModal('editSkillModal');
-        });
-        li.querySelector('.delete-skill-btn').addEventListener('click', function () {
-          li.remove();
-        });
-      }
-      editingSkillLi = null;
-      closeModal('editSkillModal');
-    });
-  }
-  document.getElementById('addSkillBtn')?.addEventListener('click', function () {
-    editingSkillLi = null;
-    editSkillForm.reset();
-    openModal('editSkillModal');
-  });
-
-  // AGENT CONTRACTS (duplicate logic removed; handled above)
-
-  // --- ERROR LOG ---
-  // (Duplicate block removed. Only one declaration and logic block for errorList remains above.)
-
-  // AGENT MANAGEMENT
-  // (Duplicate block removed. Only one declaration and logic block for agentList remains above.)
-
-  // DASHBOARD CARDS
-  // (Duplicate block removed. Only one declaration and logic block for dashboardCards remains above.)
 });
 // --- Dropdown and Modal Logic for All CRUD Actions ---
 document.addEventListener('DOMContentLoaded', function () {

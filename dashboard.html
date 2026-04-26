@@ -4,76 +4,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AgentHub Admin Panel - Dashboard</title>
-  <link href="styles/custom-styles.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
 </head>
 <body>
-  <div class="app-container">
-    <aside class="sidebar">
-      <h1 class="logo">AgentHub</h1>
-      <nav>
-        <ul>
-          <li><a href="dashboard.html" class="active">Dashboard</a></li>
-          <li><a href="user_management.html">User Management</a></li>
-          <li><a href="agent_management.html">Agent Management</a></li>
-          <li><a href="skills_catalog.html">Skills</a></li>
-          <li><a href="agent_contracts.html">Agent Contracts</a></li>
-          <li><a href="error_log.html">Error Log</a></li>
+  <div class="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white dark:bg-gray-800 shadow flex flex-col p-4">
+      <h1 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-8">AgentHub</h1>
+      <nav class="flex-1">
+        <ul class="space-y-2">
+          <li><a href="dashboard.html" class="block px-4 py-2 rounded bg-blue-200 dark:bg-blue-700 font-semibold">Dashboard</a></li>
+          <li><a href="user_management.html" class="block px-4 py-2 rounded hover:bg-blue-100 dark:hover:bg-blue-700">User Management</a></li>
+          <li><a href="agent_management.html" class="block px-4 py-2 rounded hover:bg-blue-100 dark:hover:bg-blue-700">Agent Management</a></li>
+          <li><a href="skills_catalog.html" class="block px-4 py-2 rounded hover:bg-blue-100 dark:hover:bg-blue-700">Skills</a></li>
+          <li><a href="agent_contracts.html" class="block px-4 py-2 rounded hover:bg-blue-100 dark:hover:bg-blue-700">Agent Contracts</a></li>
+          <li><a href="error_log.html" class="block px-4 py-2 rounded hover:bg-blue-100 dark:hover:bg-blue-700">Error Log</a></li>
         </ul>
       </nav>
-      <button id="darkModeToggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+
+      <button id="darkModeToggle" class="mt-8 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-xl" aria-label="Toggle dark mode">🌙</button>
     </aside>
-    <main class="main-content">
-      <header class="main-header">
-        <h2>Dashboard</h2>
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+      <header class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Dashboard</h2>
       </header>
-      <section class="dashboard-cards">
-        <div class="card">Total Revenue: <span>$120,000</span>
-          <span class="card-actions">
-            <button class="btn edit-card-btn">Edit</button>
-            <button class="btn delete-card-btn">Delete</button>
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-6 flex flex-col items-start">
+          <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Total Revenue</span>
+          <span class="text-2xl font-bold text-blue-700 dark:text-blue-300">$120,000</span>
+          <span class="mt-4 space-x-2">
+            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-card-btn">Edit</button>
+            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-card-btn">Delete</button>
           </span>
         </div>
-        <div class="card">Active Agents: <span>14</span>
-          <span class="card-actions">
-            <button class="btn edit-card-btn">Edit</button>
-            <button class="btn delete-card-btn">Delete</button>
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-6 flex flex-col items-start">
+          <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Active Agents</span>
+          <span class="text-2xl font-bold text-blue-700 dark:text-blue-300">14</span>
+          <span class="mt-4 space-x-2">
+            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-card-btn">Edit</button>
+            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-card-btn">Delete</button>
           </span>
         </div>
-        <div class="card">Failing Agents: <span>2</span>
-          <span class="card-actions">
-            <button class="btn edit-card-btn">Edit</button>
-            <button class="btn delete-card-btn">Delete</button>
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-6 flex flex-col items-start">
+          <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Failing Agents</span>
+          <span class="text-2xl font-bold text-blue-700 dark:text-blue-300">2</span>
+          <span class="mt-4 space-x-2">
+            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-card-btn">Edit</button>
+            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-card-btn">Delete</button>
           </span>
-        </div>
-        <button class="btn" id="addCardBtn">Add Card</button>
-        <!-- Edit Card Modal -->
-        <div id="editCardModal" class="modal hidden">
-          <div class="modal-content">
-            <span id="closeEditCardModal" class="close">&times;</span>
-            <h3>Edit Card</h3>
-            <form id="editCardForm">
-              <label>Card Name: <input type="text" id="editCardName"></label><br>
-              <label>Value: <input type="text" id="editCardValue"></label><br>
-              <button type="submit" class="btn">Save</button>
-            </form>
-          </div>
-        </div>
-        <!-- Delete Confirmation Modal -->
-        <div id="deleteCardModal" class="modal hidden">
-          <div class="modal-content">
-            <span id="closeDeleteCardModal" class="close">&times;</span>
-            <h3>Delete Card</h3>
-            <p>Are you sure you want to delete this card?</p>
-            <button id="confirmDeleteCard" class="btn">Yes, Delete</button>
-            <button id="cancelDeleteCard" class="btn">Cancel</button>
-          </div>
         </div>
       </section>
-      <section class="dashboard-chart">
-        <div class="chart-placeholder">[Weekly Activity Chart]</div>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow mb-8" id="addCardBtn">Add Card</button>
+      <!-- Edit Card Modal -->
+      <div id="editCardModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded shadow-lg p-8 w-full max-w-md">
+          <span id="closeEditCardModal" class="float-right text-2xl cursor-pointer">&times;</span>
+          <h3 class="text-xl font-bold mb-4">Edit Card</h3>
+          <form id="editCardForm" class="space-y-4">
+            <label class="block">Card Name: <input type="text" id="editCardName" class="mt-1 w-full border rounded p-2"></label>
+            <label class="block">Value: <input type="text" id="editCardValue" class="mt-1 w-full border rounded p-2"></label>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Save</button>
+          </form>
+        </div>
+      </div>
+      <!-- Delete Confirmation Modal -->
+      <div id="deleteCardModal" class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded shadow-lg p-8 w-full max-w-md m-0 text-center">
+          <h3 class="text-xl font-bold mb-4 text-center">Delete Card</h3>
+          <p class="mb-4 text-center">Are you sure you want to delete this card?</p>
+          <div class="flex justify-center gap-2">
+            <button id="confirmDeleteCard" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Yes, Delete</button>
+            <button id="cancelDeleteCard" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <section class="mt-8">
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-8">
+          <h3 class="text-lg font-bold mb-4 text-gray-700 dark:text-gray-200">Weekly Activity Chart</h3>
+          <canvas id="weeklyActivityChart" height="120"></canvas>
+        </div>
       </section>
     </main>
   </div>
+  <script>
+    // Universal light/dark mode toggle
+    document.addEventListener('DOMContentLoaded', function () {
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const html = document.documentElement;
+      // Start in light mode
+      html.classList.remove('dark');
+      if (darkModeToggle) darkModeToggle.textContent = '🌙';
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function () {
+          if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            darkModeToggle.textContent = '🌙';
+          } else {
+            html.classList.add('dark');
+            darkModeToggle.textContent = '☀️';
+          }
+        });
+      }
+    });
+  </script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/agenthub-ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const ctx = document.getElementById('weeklyActivityChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+              label: 'Active Agents',
+              data: [12, 19, 14, 17, 13, 15, 11],
+              backgroundColor: 'rgba(59, 130, 246, 0.7)',
+              borderColor: 'rgba(59, 130, 246, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: (function() {
+                    const docEl = document.documentElement;
+                    if (docEl && docEl.classList && typeof docEl.classList.contains === 'function') {
+                      return docEl.classList.contains('dark')
+                        ? getComputedStyle(docEl).getPropertyValue('--tw-prose-invert-body') || '#d1d5db'
+                        : getComputedStyle(docEl).getPropertyValue('--tw-prose-body') || '#374151';
+                    }
+                    return '#374151';
+                  })()
+                }
+              },
+              x: {
+                ticks: {
+                  color: (function() {
+                    const docEl = document.documentElement;
+                    if (docEl && docEl.classList && typeof docEl.classList.contains === 'function') {
+                      return docEl.classList.contains('dark')
+                        ? getComputedStyle(docEl).getPropertyValue('--tw-prose-invert-body') || '#d1d5db'
+                        : getComputedStyle(docEl).getPropertyValue('--tw-prose-body') || '#374151';
+                    }
+                    return '#374151';
+                  })()
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
