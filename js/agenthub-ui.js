@@ -53,8 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
     addCardBtn.addEventListener('click', function () {
       window.editingCardIdx = null;
       editCardForm.reset();
+      sessionStorage.setItem('addCardModal', '1');
       openModal('editCardModal');
     });
+    // Restore add modal if sessionStorage flag is set
+    if (sessionStorage.getItem('addCardModal') === '1') {
+      sessionStorage.removeItem('addCardModal');
+      openModal('editCardModal');
+    }
   }
 });
 // --- Track agent CRUD actions for activity chart ---
@@ -296,6 +302,12 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('addAgentBtn')?.addEventListener('click', function () {
     editingAgentIdx = null;
     editAgentForm.reset();
+    sessionStorage.setItem('addAgentModal', '1');
+    openModal('editAgentModal');
+  });
+  // Restore add modal if sessionStorage flag is set
+  if (sessionStorage.getItem('addAgentModal') === '1') {
+    sessionStorage.removeItem('addAgentModal');
     openModal('editAgentModal');
   });
 
@@ -341,6 +353,12 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('addContractBtn')?.addEventListener('click', function () {
     editingContractIdx = null;
     editContractForm.reset();
+    sessionStorage.setItem('addContractModal', '1');
+    openModal('editContractModal');
+  });
+  // Restore add modal if sessionStorage flag is set
+  if (sessionStorage.getItem('addContractModal') === '1') {
+    sessionStorage.removeItem('addContractModal');
     openModal('editContractModal');
   });
 
@@ -437,6 +455,12 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('addUserBtn')?.addEventListener('click', function () {
     editingUserIdx = null;
     editUserForm.reset();
+    sessionStorage.setItem('addUserModal', '1');
+    openModal('editUserModal');
+  });
+  // Restore add modal if sessionStorage flag is set
+  if (sessionStorage.getItem('addUserModal') === '1') {
+    sessionStorage.removeItem('addUserModal');
     openModal('editUserModal');
   });
 
@@ -482,6 +506,12 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('addSkillBtn')?.addEventListener('click', function () {
     editingSkillIdx = null;
     editSkillForm.reset();
+    sessionStorage.setItem('addSkillModal', '1');
+    openModal('editSkillModal');
+  });
+  // Restore add modal if sessionStorage flag is set
+  if (sessionStorage.getItem('addSkillModal') === '1') {
+    sessionStorage.removeItem('addSkillModal');
     openModal('editSkillModal');
   });
 
@@ -531,6 +561,12 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('addErrorBtn')?.addEventListener('click', function () {
     editingErrorIdx = null;
     editErrorForm.reset();
+    sessionStorage.setItem('addErrorModal', '1');
+    openModal('editErrorModal');
+  });
+  // Restore add modal if sessionStorage flag is set
+  if (sessionStorage.getItem('addErrorModal') === '1') {
+    sessionStorage.removeItem('addErrorModal');
     openModal('editErrorModal');
   });
 });
