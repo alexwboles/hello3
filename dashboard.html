@@ -38,25 +38,46 @@
         <div class="bg-white dark:bg-gray-800 rounded shadow p-6 flex flex-col items-start">
           <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Total Revenue</span>
           <span class="text-2xl font-bold text-blue-700 dark:text-blue-300">$120,000</span>
-          <span class="mt-4 space-x-2">
-            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-card-btn">Edit</button>
-            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-card-btn">Delete</button>
+          <span class="mt-4">
+            <span class="relative inline-block text-left">
+              <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+              <div class="dropdown-menu origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 hidden z-10">
+                <div class="py-1">
+                  <button class="dropdown-item block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="edit">Edit</button>
+                  <button class="dropdown-item block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="delete">Delete</button>
+                </div>
+              </div>
+            </span>
           </span>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded shadow p-6 flex flex-col items-start">
           <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Active Agents</span>
           <span class="text-2xl font-bold text-blue-700 dark:text-blue-300">14</span>
-          <span class="mt-4 space-x-2">
-            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-card-btn">Edit</button>
-            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-card-btn">Delete</button>
+          <span class="mt-4">
+            <span class="relative inline-block text-left">
+              <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+              <div class="dropdown-menu origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 hidden z-10">
+                <div class="py-1">
+                  <button class="dropdown-item block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="edit">Edit</button>
+                  <button class="dropdown-item block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="delete">Delete</button>
+                </div>
+              </div>
+            </span>
           </span>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded shadow p-6 flex flex-col items-start">
           <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Failing Agents</span>
           <span class="text-2xl font-bold text-blue-700 dark:text-blue-300">2</span>
-          <span class="mt-4 space-x-2">
-            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-card-btn">Edit</button>
-            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-card-btn">Delete</button>
+          <span class="mt-4">
+            <span class="relative inline-block text-left">
+              <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+              <div class="dropdown-menu origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 hidden z-10">
+                <div class="py-1">
+                  <button class="dropdown-item block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="edit">Edit</button>
+                  <button class="dropdown-item block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="delete">Delete</button>
+                </div>
+              </div>
+            </span>
           </span>
         </div>
       </section>

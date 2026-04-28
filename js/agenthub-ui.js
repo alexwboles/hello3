@@ -30,11 +30,32 @@ document.addEventListener('DOMContentLoaded', function () {
       closeModal(btn.closest('.modal').id);
     });
   });
-
-  // Close modals on backdrop click
+  // Close modals on backdrop click (always works, even for dynamically opened modals)
   document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', function (e) {
+    modal.addEventListener('mousedown', function (e) {
       if (e.target === this) closeModal(modal.id);
+    });
+  });
+
+  // Dropdown logic for all dropdowns (universal)
+  document.addEventListener('click', function (e) {
+    // Close all dropdowns if click outside
+    document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
+  });
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // Close other dropdowns
+      document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
+      // Open this one
+      const menu = btn.parentElement.querySelector('.dropdown-menu');
+      if (menu) menu.classList.toggle('hidden');
+    });
+  });
+  // Prevent dropdown menu click from closing itself
+  document.querySelectorAll('.dropdown-menu').forEach(menu => {
+    menu.addEventListener('click', function (e) {
+      e.stopPropagation();
     });
   });
 
@@ -45,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
       closeModal('editCardModal');
     });
   }
-
   // Add Card button
   const addCardBtn = document.getElementById('addCardBtn');
   const editCardForm = document.getElementById('editCardForm');
