@@ -6,6 +6,19 @@
 AgentHub Admin Panel is a prototype admin interface for managing AI agent rentals. It allows an admin user to monitor platform metrics, manage users, agents, skills, contracts, and error logs. All data is hardcoded for demonstration; there is no backend.
 
 ## Tech Stack & Constraints
+- See screenshots in project root for UI reference (Skills, Agent Management, Contracts, User Management)
+
+## Build & Run Instructions
+
+1. Clone the repository from GitHub.
+2. Open the project folder in VS Code or your preferred editor.
+3. No build step is required; all code is static HTML, JS, and Tailwind CSS via CDN.
+4. To preview locally, run:
+	- `python -m http.server 8000` (Python 3.x required)
+	- Open [http://localhost:8000/](http://localhost:8000/) in your browser.
+5. All data is hardcoded for demo purposes; no backend or database is required.
+6. For UI/UX reference, see the included screenshots (Skills, Agent Management, Contracts, User Management, etc.).
+7. To deploy, push to GitHub and use GitHub Pages or any static hosting provider.
 
 - HTML (semantic, accessible)
 - Tailwind CSS via CDN (no custom CSS files, no inline style attributes)

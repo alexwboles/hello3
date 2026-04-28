@@ -35,7 +35,7 @@
         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">User Management</h2>
       </header>
       <section>
-        <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow mb-4" id="addUserBtn">Add User</button>
+        <!-- Removed Add User button -->
         <div class="overflow-x-auto">
           <table class="min-w-full bg-white dark:bg-gray-800 rounded shadow">
             <thead>
@@ -48,56 +48,80 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="border-t border-gray-200 dark:border-gray-700">
+              <tr class="border-t border-gray-200 dark:border-gray-700 group">
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Alice Johnson</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">alice@example.com</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Pro</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Active</td>
-                <td class="px-4 py-2"><span class="space-x-2"><button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-user-btn">Edit</button><button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-user-btn">Delete</button></span></td>
+                <td class="px-4 py-2 relative">
+                  <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+                  <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 hidden z-10">
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="view">Show details</button>
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600" data-action="delete">Delete</button>
+                  </div>
+                </td>
               </tr>
-              <tr class="border-t border-gray-200 dark:border-gray-700">
+              <tr class="border-t border-gray-200 dark:border-gray-700 group">
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Bob Smith</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">bob@example.com</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Starter</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Pending</td>
-                <td class="px-4 py-2"><span class="space-x-2"><button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-user-btn">Edit</button><button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-user-btn">Delete</button></span></td>
+                <td class="px-4 py-2 relative">
+                  <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+                  <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 hidden z-10">
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="view">Show details</button>
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600" data-action="delete">Delete</button>
+                  </div>
+                </td>
               </tr>
-              <tr class="border-t border-gray-200 dark:border-gray-700">
+              <tr class="border-t border-gray-200 dark:border-gray-700 group">
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Carlos Lee</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">carlos@example.com</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Pro</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Active</td>
-                <td class="px-4 py-2"><span class="space-x-2"><button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-user-btn">Edit</button><button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-user-btn">Delete</button></span></td>
+                <td class="px-4 py-2 relative">
+                  <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+                  <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 hidden z-10">
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="view">Show details</button>
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600" data-action="delete">Delete</button>
+                  </div>
+                </td>
               </tr>
-              <tr class="border-t border-gray-200 dark:border-gray-700">
+              <tr class="border-t border-gray-200 dark:border-gray-700 group">
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Dana White</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">dana@example.com</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Enterprise</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Inactive</td>
-                <td class="px-4 py-2"><span class="space-x-2"><button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-user-btn">Edit</button><button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-user-btn">Delete</button></span></td>
+                <td class="px-4 py-2 relative">
+                  <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+                  <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 hidden z-10">
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="view">Show details</button>
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600" data-action="delete">Delete</button>
+                  </div>
+                </td>
               </tr>
-              <tr class="border-t border-gray-200 dark:border-gray-700">
+              <tr class="border-t border-gray-200 dark:border-gray-700 group">
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Eve Black</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">eve@example.com</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Starter</td>
                 <td class="px-4 py-2 text-gray-800 dark:text-gray-100">Active</td>
-                <td class="px-4 py-2"><span class="space-x-2"><button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded edit-user-btn">Edit</button><button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded delete-user-btn">Delete</button></span></td>
+                <td class="px-4 py-2 relative">
+                  <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+                  <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 hidden z-10">
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="view">Show details</button>
+                    <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600" data-action="delete">Delete</button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <!-- Edit User Modal -->
-        <div id="editUserModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <!-- User Detail Modal -->
+        <div id="userDetailModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div class="bg-white dark:bg-gray-800 rounded shadow-lg p-8 w-full max-w-md relative">
-            <span id="closeEditUserModal" class="close absolute top-2 right-4 text-2xl cursor-pointer">&times;</span>
-            <h3 class="text-xl font-bold mb-4">Add / Edit User</h3>
-            <form id="editUserForm" class="space-y-4">
-              <label class="block">Name: <input type="text" id="editUserName" class="mt-1 w-full border rounded p-2"></label>
-              <label class="block">Email: <input type="email" id="editUserEmail" class="mt-1 w-full border rounded p-2"></label>
-              <label class="block">Plan: <input type="text" id="editUserPlan" class="mt-1 w-full border rounded p-2"></label>
-              <label class="block">Status: <input type="text" id="editUserStatus" class="mt-1 w-full border rounded p-2"></label>
-              <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Save</button>
-            </form>
+            <span id="closeUserModal" class="close absolute top-2 right-4 text-2xl cursor-pointer">&times;</span>
+            <h3 class="text-xl font-bold mb-4">User Details</h3>
+            <div id="userDetailContent" class="space-y-2"></div>
           </div>
         </div>
         <!-- Delete Confirmation Modal -->

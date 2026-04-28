@@ -418,51 +418,68 @@ document.addEventListener('DOMContentLoaded', function () {
     userTable.innerHTML = '';
     users.forEach((user, idx) => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${user.name}</td><td>${user.email}</td><td>${user.plan}</td><td>${user.status}</td><td><span class="user-table-actions"><button class="btn edit-user-btn">Edit</button><button class="btn delete-user-btn">Delete</button></span></td>`;
+      tr.className = 'border-t border-gray-200 dark:border-gray-700 group';
+      tr.innerHTML = `
+        <td class="px-4 py-2 text-gray-800 dark:text-gray-100">${user.name}</td>
+        <td class="px-4 py-2 text-gray-800 dark:text-gray-100">${user.email}</td>
+        <td class="px-4 py-2 text-gray-800 dark:text-gray-100">${user.plan}</td>
+        <td class="px-4 py-2 text-gray-800 dark:text-gray-100">${user.status}</td>
+        <td class="px-4 py-2 relative">
+          <button class="dropdown-btn px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">⋮</button>
+          <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 hidden z-10">
+            <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-action="view">Show details</button>
+            <button class="dropdown-item block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600" data-action="delete">Delete</button>
+          </div>
+        </td>
+      `;
       userTable.appendChild(tr);
-      tr.querySelector('.edit-user-btn').addEventListener('click', function () {
-        document.getElementById('editUserName').value = user.name;
-        document.getElementById('editUserEmail').value = user.email;
-        document.getElementById('editUserPlan').value = user.plan;
-        document.getElementById('editUserStatus').value = user.status;
-        editingUserIdx = idx;
-        openModal('editUserModal');
+      // Dropdown logic
+      const dropdownBtn = tr.querySelector('.dropdown-btn');
+      const dropdownMenu = tr.querySelector('.dropdown-menu');
+      dropdownBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.dropdown-menu').forEach(menu => { if (menu !== dropdownMenu) menu.classList.add('hidden'); });
+        dropdownMenu.classList.toggle('hidden');
       });
-      tr.querySelector('.delete-user-btn').addEventListener('click', function () {
-        users.splice(idx, 1);
-        renderUsers();
+      // Show details
+      dropdownMenu.querySelector('[data-action="view"]').addEventListener('click', function() {
+        document.getElementById('userDetailContent').innerHTML =
+          `<div><b>Name:</b> ${user.name}</div>` +
+          `<div><b>Email:</b> ${user.email}</div>` +
+          `<div><b>Plan:</b> ${user.plan}</div>` +
+          `<div><b>Status:</b> ${user.status}</div>`;
+        openModal('userDetailModal');
+        dropdownMenu.classList.add('hidden');
+      });
+      // Delete
+      dropdownMenu.querySelector('[data-action="delete"]').addEventListener('click', function() {
+        editingUserIdx = idx;
+        openModal('deleteUserModal');
+        dropdownMenu.classList.add('hidden');
       });
     });
   }
   if (userTable) renderUsers();
-  if (editUserForm) {
-    editUserForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('editUserName').value;
-      const email = document.getElementById('editUserEmail').value;
-      const plan = document.getElementById('editUserPlan').value;
-      const status = document.getElementById('editUserStatus').value;
+
+  // Delete user modal logic
+  const confirmDeleteUser = document.getElementById('confirmDeleteUser');
+  if (confirmDeleteUser) {
+    confirmDeleteUser.onclick = function() {
       if (editingUserIdx !== null && editingUserIdx >= 0 && editingUserIdx < users.length) {
-        users[editingUserIdx] = { name, email, plan, status };
-      } else {
-        users.push({ name, email, plan, status });
+        users.splice(editingUserIdx, 1);
+        renderUsers();
+        editingUserIdx = null;
+        closeModal('deleteUserModal');
       }
-      renderUsers();
-      editingUserIdx = null;
-      closeModal('editUserModal');
-    });
+    };
   }
-  document.getElementById('addUserBtn')?.addEventListener('click', function () {
-    editingUserIdx = null;
-    editUserForm.reset();
-    sessionStorage.setItem('addUserModal', '1');
-    openModal('editUserModal');
-  });
-  // Restore add modal if sessionStorage flag is set
-  if (sessionStorage.getItem('addUserModal') === '1') {
-    sessionStorage.removeItem('addUserModal');
-    openModal('editUserModal');
-  });
+  // Close modal on cancel
+  const cancelDeleteUser = document.getElementById('cancelDeleteUser');
+  if (cancelDeleteUser) {
+    cancelDeleteUser.onclick = function() {
+      closeModal('deleteUserModal');
+    };
+  }
 
   // --- SKILLS ---
   const skillsList = document.querySelector('.skills-list');
