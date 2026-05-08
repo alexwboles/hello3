@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentHub Admin Panel - Skills</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: "class" };
+  </script>
+</head>
+<body class="h-full bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+  <div class="min-h-screen lg:grid lg:grid-cols-[16rem_1fr]">
+    <aside class="border-r border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <h1 class="mb-6 text-2xl font-bold tracking-tight text-sky-700 dark:text-sky-300">AgentHub</h1>
+      <nav>
+        <ul class="space-y-1">
+          <li><a href="dashboard.html" class="block rounded-md px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Dashboard</a></li>
+          <li><a href="user_management.html" class="block rounded-md px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">User Management</a></li>
+          <li><a href="agent_management.html" class="block rounded-md px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Agent Management</a></li>
+          <li><a href="skills_catalog.html" class="block rounded-md bg-sky-100 px-3 py-2 font-semibold text-sky-900 dark:bg-sky-900/40 dark:text-sky-100">Skills</a></li>
+          <li><a href="agent_contracts.html" class="block rounded-md px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Agent Contracts</a></li>
+          <li><a href="error_log.html" class="block rounded-md px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Error Log</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="p-4 sm:p-6 lg:p-8">
+      <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-2xl font-bold">Skills Catalog</h2>
+        <button id="darkModeToggle" class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Switch to Dark</button>
+      </header>
+
+      <section class="mb-4 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900">
+        <h3 class="text-lg font-semibold">What is a skill in AgentHub?</h3>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">A skill is a reusable capability module that can be enabled on one or more agents. Skills define what an agent can do, such as browsing, parsing documents, or scheduling actions.</p>
+      </section>
+
+      <section id="skillList" class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <article class="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900" data-skill-name="Web Browsing" data-skill-description="Allows the agent to navigate web pages and extract structured findings." data-skill-count="2">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h4 class="font-semibold">Web Browsing</h4>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Allows the agent to navigate web pages and extract structured findings.</p>
+              <p class="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">Enabled on 2 agents</p>
+            </div>
+            <div class="relative inline-block">
+              <button class="dropdown-trigger rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">⋮</button>
+              <div class="dropdown-menu absolute right-0 z-20 mt-2 hidden w-40 rounded-md border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800">
+                <button class="view-skill-btn block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">View detail</button>
+                <button class="delete-skill-btn block w-full rounded px-3 py-2 text-left text-sm text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-700">Delete</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900" data-skill-name="Document Reader" data-skill-description="Reads PDF and DOCX files and produces concise, cited summaries." data-skill-count="3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h4 class="font-semibold">Document Reader</h4>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Reads PDF and DOCX files and produces concise, cited summaries.</p>
+              <p class="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">Enabled on 3 agents</p>
+            </div>
+            <div class="relative inline-block">
+              <button class="dropdown-trigger rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">⋮</button>
+              <div class="dropdown-menu absolute right-0 z-20 mt-2 hidden w-40 rounded-md border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800">
+                <button class="view-skill-btn block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">View detail</button>
+                <button class="delete-skill-btn block w-full rounded px-3 py-2 text-left text-sm text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-700">Delete</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900" data-skill-name="Calendar Manager" data-skill-description="Creates, updates, and resolves calendar events with conflict checks." data-skill-count="1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h4 class="font-semibold">Calendar Manager</h4>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Creates, updates, and resolves calendar events with conflict checks.</p>
+              <p class="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">Enabled on 1 agent</p>
+            </div>
+            <div class="relative inline-block">
+              <button class="dropdown-trigger rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">⋮</button>
+              <div class="dropdown-menu absolute right-0 z-20 mt-2 hidden w-40 rounded-md border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800">
+                <button class="view-skill-btn block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">View detail</button>
+                <button class="delete-skill-btn block w-full rounded px-3 py-2 text-left text-sm text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-700">Delete</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900" data-skill-name="Incident Summarization" data-skill-description="Builds incident timelines from logs and proposes next response steps." data-skill-count="1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h4 class="font-semibold">Incident Summarization</h4>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Builds incident timelines from logs and proposes next response steps.</p>
+              <p class="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">Enabled on 1 agent</p>
+            </div>
+            <div class="relative inline-block">
+              <button class="dropdown-trigger rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">⋮</button>
+              <div class="dropdown-menu absolute right-0 z-20 mt-2 hidden w-40 rounded-md border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800">
+                <button class="view-skill-btn block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">View detail</button>
+                <button class="delete-skill-btn block w-full rounded px-3 py-2 text-left text-sm text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-700">Delete</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="skillDetailModal" class="modal fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 p-4">
+    <div class="w-full max-w-lg rounded-xl bg-white p-6 dark:bg-slate-900">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-bold">Skill Detail</h3>
+        <button data-close-modal="skillDetailModal" class="rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">Close</button>
+      </div>
+      <div id="skillDetailContent" class="space-y-2 text-sm"></div>
+    </div>
+  </div>
+
+  <script src="js/agenthub-ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const skillList = document.getElementById("skillList");
+      const detailContent = document.getElementById("skillDetailContent");
+
+      skillList.addEventListener("click", function (event) {
+        const viewBtn = event.target.closest(".view-skill-btn");
+        if (viewBtn) {
+          const card = viewBtn.closest("article");
+          window.AgentHubUI.closeAllDropdowns();
+          detailContent.innerHTML =
+            "<p><strong>Skill:</strong> " + card.dataset.skillName + "</p>" +
+            "<p><strong>Description:</strong> " + card.dataset.skillDescription + "</p>" +
+            "<p><strong>Enabled Agents:</strong> " + card.dataset.skillCount + "</p>";
+          window.AgentHubUI.openModal("skillDetailModal");
+          return;
+        }
+
+        const deleteBtn = event.target.closest(".delete-skill-btn");
+        if (deleteBtn) {
+          window.AgentHubUI.closeAllDropdowns();
+          const card = deleteBtn.closest("article");
+          card.remove();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
