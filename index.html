@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <main class="flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-3xl font-bold mb-4">Redirecting…</h1>
+    <p class="text-lg">You are being redirected to the dashboard.<br>If not redirected, <a href="dashboard.html" class="text-blue-600 underline">click here</a>.</p>
+    <div class="mt-8 text-5xl">🔄</div>
+  </main>
+  <script>
+    setTimeout(function() {
+      window.location.href = "dashboard.html";
+    }, 1000);
+  </script>
+</body>
+</html>
